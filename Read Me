@@ -1,0 +1,97 @@
+# 📚 Library Book Tracker (MySQL Project)
+
+A simple but well-structured **Library Management System** built using MySQL.  
+This project demonstrates relational database design, SQL queries, and real-world data modeling.
+
+---
+
+## 🧩 Project Overview
+
+This system manages:
+- 👤 Library Members
+- 📚 Books Collection
+- 📖 Borrowing Records
+
+It tracks which member borrows which book, including borrow dates, due dates, and return status.
+
+---
+
+## 🛠️ Tech Stack
+
+![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-025E8C?style=for-the-badge&logo=database&logoColor=white)
+![Workbench](https://img.shields.io/badge/MySQL_Workbench-005C84?style=for-the-badge&logo=mysql&logoColor=white)
+
+---
+
+## 🗂️ Database Structure
+
+### 👤 Members Table
+Stores library users and their information.
+
+### 📚 Books Table
+Stores all available books in the library.
+
+### 📖 Borrowing Table
+Links members and books and tracks borrowing activity.
+
+---
+
+## 🔗 Relationships
+
+- One Member → Many Borrowings  
+- One Book → Many Borrowings  
+- Borrowing table acts as a bridge (many-to-many relationship)
+
+---
+
+## 🧠 Concepts Used
+
+- CREATE TABLE
+- INSERT INTO
+- SELECT queries
+- JOIN operations
+- Primary & Foreign Keys
+- Relational database design
+
+---
+
+## 📸 Screenshots
+
+> Add your screenshots here
+
+### 📌 Database Schema
+![Schema](images/schema.png)
+
+### 📌 Sample Query Output
+![Query Result](images/query-result.png)
+
+---
+
+## 🚀 How It Works
+
+1. Members register in the system  
+2. Books are added to the library  
+3. Borrowing records connect members and books  
+4. Return status is updated when books are returned  
+5. JOIN queries generate full reports
+
+---
+
+## 📁 Project Files
+
+- `library_tracker.sql` → full database script
+- `README.md` → documentation
+- `images/` → screenshots (optional but recommended)
+
+---
+
+## 🎯 Purpose
+
+This project was created to practice **MySQL database design and relational concepts** using a real-world library system.
+
+---
+
+## ⭐ Author
+
+Created as part of a MySQL learning journey.
