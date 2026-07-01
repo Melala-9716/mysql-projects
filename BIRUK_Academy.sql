@@ -1,16 +1,3 @@
--- =============================================
-           -- BIRUK ACADEMY SCHOOL MANAGEMENT DATABASE — Database Implementation
-
--- Project    : Database Design Implementation for Biruk_Academy
-
--- Institution: Addis Ababa University, College of Technology and Built
---              Environment (CTBE), Department of Software Engineering
--- 1.Liza Usman - UGR/5968/17
--- 2.Melala Muleta - UGR/9716/17
--- 3.Mintesnot Kebede - UGR/8313/17
--- 4.Muaz Siraj  - UGR/4766/17
--- 5.Nardos Solomon - UGR/8725/17
-
 CREATE DATABASE IF NOT EXISTS BirukAcademy;
 USE BirukAcademy;
 
