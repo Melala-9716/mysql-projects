@@ -52,8 +52,7 @@ A multi-branch school management system designed to handle students, teachers, p
 ---
 
 ### ER Diagram
-![Biruk Academy ER Diagram](./diagrams/biruk_academy_er.png)
-
+![ER Diagram](./diagrams/Biruk%20Academy%20Er%20Diagram.jpg)
 ---
 
 ### Sample Queries Included
