@@ -21,8 +21,7 @@ A relational database system for managing library operations including books, me
 
 ### ER Diagram
 
-mysql-projects/diagrams
-/Library Er Diagram.jpg
+![ER Diagram](./diagrams/Library%20Er%20Diagram.jpg)
 ---
 
 ## 🏫 Biruk Academy School Management Database
