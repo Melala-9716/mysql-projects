@@ -1,0 +1,193 @@
+CREATE DATABASE Hotel;
+
+USE Hotel;
+CREATE TABLE Guests (
+    GuestID INT PRIMARY KEY,
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+    Phone VARCHAR(20),
+    Email VARCHAR(100),
+    Address VARCHAR(255)
+);
+CREATE TABLE Rooms (
+    RoomID INT PRIMARY KEY,
+    RoomNumber INT UNIQUE,
+    RoomType VARCHAR(50),
+    PricePerNight DECIMAL(10,2),
+    Capacity INT,
+    Status VARCHAR(20)
+);
+CREATE TABLE Reservations (
+    ReservationID INT PRIMARY KEY,
+    GuestID INT,
+    RoomID INT,
+    CheckInDate DATE,
+    CheckOutDate DATE,
+    ReservationDate DATE,
+    TotalAmount DECIMAL(10,2),
+    Status VARCHAR(20),
+
+    FOREIGN KEY (GuestID) REFERENCES Guests(GuestID),
+    FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID)
+);
+CREATE TABLE Payments (
+    PaymentID INT PRIMARY KEY,
+    ReservationID INT,
+    PaymentDate DATE,
+    Amount DECIMAL(10,2),
+    PaymentMethod VARCHAR(50),
+    PaymentStatus VARCHAR(20),
+
+    FOREIGN KEY (ReservationID) REFERENCES Reservations(ReservationID)
+);
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    FirstName VARCHAR(100),
+    LastName VARCHAR(100),
+    Position VARCHAR(100),
+    Phone VARCHAR(20),
+    Email VARCHAR(100),
+    Salary DECIMAL(10,2),
+    HireDate DATE,
+    Shift VARCHAR(20)
+);
+
+CREATE TABLE Services (
+    ServiceID INT PRIMARY KEY,
+    ServiceName VARCHAR(100),
+    Description VARCHAR(255),
+    ServicePrice DECIMAL(10,2),
+    Availability VARCHAR(20)
+);
+
+CREATE TABLE ServiceUsage (
+    ServiceUsageID INT PRIMARY KEY,
+    ReservationID INT,
+    ServiceID INT,
+    UsageDate DATE,
+    Quantity INT,
+    TotalCost DECIMAL(10,2),
+
+    FOREIGN KEY (ReservationID) REFERENCES Reservations(ReservationID),
+    FOREIGN KEY (ServiceID) REFERENCES Services(ServiceID)
+);
+
+CREATE TABLE RoomMaintenance (
+    MaintenanceID INT PRIMARY KEY,
+    RoomID INT,
+    MaintenanceDate DATE,
+    Description VARCHAR(255),
+    MaintenanceCost DECIMAL(10,2),
+    Status VARCHAR(20),
+
+    FOREIGN KEY (RoomID) REFERENCES Rooms(RoomID)
+);
+
+CREATE TABLE Feedback (
+    FeedbackID INT PRIMARY KEY,
+    GuestID INT,
+    ReservationID INT,
+    Rating INT CHECK(Rating BETWEEN 1 AND 5),
+    Comments VARCHAR(255),
+    FeedbackDate DATE,
+
+    FOREIGN KEY (GuestID) REFERENCES Guests(GuestID),
+    FOREIGN KEY (ReservationID) REFERENCES Reservations(ReservationID)
+);
+INSERT INTO Guests VALUES
+(1,'John','Smith','0911000001','john@gmail.com','Addis Ababa'),
+(2,'Sara','Ahmed','0911000002','sara@gmail.com','Bole'),
+(3,'David','Brown','0911000003','david@gmail.com','Lideta'),
+(4,'Mekdes','Tadesse','0911000004','mekdes@gmail.com','Kazanchis');
+
+INSERT INTO Rooms VALUES
+(1,101,'Single',50.00,1,'Available'),
+(2,102,'Double',80.00,2,'Occupied'),
+(3,103,'Suite',150.00,4,'Available'),
+(4,104,'Double',80.00,2,'Maintenance');
+
+INSERT INTO Reservations VALUES
+(1,1,2,'2026-07-01','2026-07-05','2026-06-20',320.00,'Checked In'),
+(2,2,1,'2026-07-10','2026-07-12','2026-06-25',100.00,'Booked'),
+(3,3,3,'2026-07-15','2026-07-20','2026-07-01',750.00,'Checked Out'),
+(4,4,4,'2026-07-18','2026-07-20','2026-07-05',160.00,'Booked');
+
+INSERT INTO Payments VALUES
+(1,1,'2026-07-01',320.00,'Credit Card','Paid'),
+(2,2,'2026-07-10',100.00,'Cash','Paid'),
+(3,3,'2026-07-15',750.00,'Bank Transfer','Paid'),
+(4,4,'2026-07-18',160.00,'Mobile Payment','Pending');
+
+INSERT INTO Employees VALUES
+(1,'Michael','Kebede','Manager','0922000001','michael@gmail.com',5000,'2024-01-10','Morning'),
+(2,'Anna','Tesfaye','Receptionist','0922000002','anna@gmail.com',2500,'2025-03-15','Night');
+
+INSERT INTO Services VALUES
+(1,'Laundry','Clothes washing',20,'Available'),
+(2,'Breakfast','Morning meal',15,'Available'),
+(3,'Airport Pickup','Transport',40,'Available'),
+(4,'Spa','Relaxation',50,'Available');
+
+INSERT INTO ServiceUsage VALUES
+(1,1,1,'2026-07-02',2,40),
+(2,1,2,'2026-07-02',2,30),
+(3,2,3,'2026-07-10',1,40);
+
+INSERT INTO RoomMaintenance VALUES
+(1,4,'2026-07-12','AC Repair',100,'Completed'),
+(2,2,'2026-07-20','Bathroom Repair',50,'In Progress');
+
+INSERT INTO Feedback VALUES
+(1,1,1,5,'Excellent service','2026-07-06'),
+(2,2,2,4,'Nice room','2026-07-13');
+SELECT * FROM Guests;
+
+SELECT *
+FROM Rooms
+WHERE Status='Available';
+
+SELECT 
+Guests.FirstName,
+Guests.LastName,
+Reservations.CheckInDate,
+Reservations.Status
+FROM Reservations
+JOIN Guests
+ON Reservations.GuestID = Guests.GuestID;
+
+SELECT
+Guests.FirstName,
+Rooms.RoomNumber,
+Rooms.RoomType,
+Reservations.CheckInDate
+FROM Reservations
+JOIN Guests
+ON Reservations.GuestID = Guests.GuestID
+JOIN Rooms
+ON Reservations.RoomID = Rooms.RoomID;
+
+SELECT SUM(Amount) AS Revenue
+FROM Payments
+WHERE PaymentStatus='Paid';
+
+SELECT Status, COUNT(*) AS Total
+FROM Reservations
+GROUP BY Status;
+
+SELECT
+Guests.FirstName,
+Services.ServiceName,
+ServiceUsage.TotalCost
+FROM ServiceUsage
+JOIN Reservations
+ON ServiceUsage.ReservationID = Reservations.ReservationID
+JOIN Guests
+ON Reservations.GuestID = Guests.GuestID
+JOIN Services
+ON ServiceUsage.ServiceID = Services.ServiceID;
+
+
+
+
+
+
