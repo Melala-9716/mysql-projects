@@ -1,5 +1,5 @@
 create database ECommerce;
-
+use ECommerce;
 create table Customers(
 CustomerID varchar(10) primary key,
 FirstName varchar(100) not null,
@@ -10,6 +10,11 @@ Address text not null,
 City varchar(100),
 Country varchar(100),
 RegistrationDate date);
+
+create table Categories(
+CategoryName varchar(100) not null,
+CategoryID varchar(10) primary key,
+Description text);
 
 create table Products(
 ProductID varchar(10) primary key,
@@ -23,16 +28,11 @@ Status varchar(15),
 FOREIGN KEY (CategoryID)
 REFERENCES Categories(CategoryID));
 
-create table Categories(
-CategoryName varchar(100) primary key,
-CategoryID varchar(10),
-Description text);
-
 create table orders(
 OrderID varchar(10) primary key,
 CustomerID varchar(10),
 OrderDate date,
-TotalAmount int,
+TotalAmount  DECIMAL(10,2),
 OrderStatus varchar(15) not null,
 ShippingAddress varchar(100),
 foreign key (CustomerID) references Customers(CustomerID)
@@ -42,9 +42,9 @@ create table OrderItems(
 OrderItemID varchar(10) primary key,
 OrderID varchar(10),
 ProductID varchar(10),
-Quantity text,
-UnitPrice int,
-Subtotal int,
+Quantity int,
+UnitPrice DECIMAL(10,2),
+Subtotal DECIMAL(10,2),
 foreign key (OrderID) references orders(OrderID),
 foreign key(ProductID) references Products(ProductID) );
 
@@ -52,7 +52,7 @@ create table Payments(
 PaymentID varchar(10) primary key,
 OrderID varchar(10),
 PaymentDate date,
-Amount int,
+Amount DECIMAL(10,2),
 PaymentMethod varchar(100),
 PaymentStatus varchar(15),
 foreign key (OrderID) references orders(OrderID) );
@@ -61,8 +61,190 @@ create table Shipping(
 ShippingID varchar(10) primary key,
 OrderID varchar(10),
 ShippingCompany varchar(100),
-TrackingNumber text,
+TrackingNumber  VARCHAR(30),
 ShippingDate date,
 DeliveryDate date,
 ShippingStatus varchar(100),
 foreign key (OrderID) references orders(OrderID));
+
+
+INSERT INTO Customers
+(CustomerID, FirstName, LastName, Email, Phone, Address, City, Country, RegistrationDate)
+VALUES
+('C001','John','Smith','john@gmail.com','0911000001','Bole','Addis Ababa','Ethiopia','2026-07-01'),
+('C002','Sara','Ahmed','sara@gmail.com','0911000002','CMC','Addis Ababa','Ethiopia','2026-07-03'),
+('C003','David','Brown','david@gmail.com','0911000003','Piassa','Addis Ababa','Ethiopia','2026-07-05'),
+('C004','Mekdes','Tadesse','mekdes@gmail.com','0911000004','Lideta','Addis Ababa','Ethiopia','2026-07-07');
+
+INSERT INTO Categories
+(CategoryID, CategoryName, Description)
+VALUES
+('CAT001','Electronics','Electronic devices'),
+('CAT002','Clothing','Men and Women clothing'),
+('CAT003','Books','Educational and story books'),
+('CAT004','Home','Home appliances');
+
+
+INSERT INTO Products
+(ProductID, ProductName, CategoryID, Price, StockQuantity, Brand, Description, Status)
+VALUES
+('P001','Laptop','CAT001',65000.00,10,'Dell','15-inch laptop','Available'),
+('P002','T-Shirt','CAT002',800.00,50,'Nike','Cotton T-Shirt','Available'),
+('P003','Database Book','CAT003',1200.00,30,'Pearson','MySQL Guide','Available'),
+('P004','Blender','CAT004',3500.00,15,'Philips','Kitchen blender','Out of Stock');
+
+INSERT INTO Orders
+(OrderID, CustomerID, OrderDate, TotalAmount, OrderStatus, ShippingAddress)
+VALUES
+('O001','C001','2026-07-10',65800.00,'Delivered','Bole, Addis Ababa'),
+('O002','C002','2026-07-11',1600.00,'Shipped','CMC, Addis Ababa'),
+('O003','C003','2026-07-12',1200.00,'Processing','Piassa, Addis Ababa'),
+('O004','C004','2026-07-13',3500.00,'Cancelled','Lideta, Addis Ababa');
+
+INSERT INTO OrderItems
+(OrderItemID, OrderID, ProductID, Quantity, UnitPrice, Subtotal)
+VALUES
+('OI001','O001','P001',1,65000.00,65000.00),
+('OI002','O001','P002',1,800.00,800.00),
+('OI003','O002','P002',2,800.00,1600.00),
+('OI004','O003','P003',1,1200.00,1200.00),
+('OI005','O004','P004',1,3500.00,3500.00);
+
+INSERT INTO Payments
+(PaymentID, OrderID, PaymentDate, Amount, PaymentMethod, PaymentStatus)
+VALUES
+('PAY001','O001','2026-07-10',65800.00,'Credit Card','Paid'),
+('PAY002','O002','2026-07-11',1600.00,'Cash','Paid'),
+('PAY003','O003','2026-07-12',1200.00,'Mobile Money','Pending'),
+('PAY004','O004','2026-07-13',3500.00,'Bank Transfer','Refunded');
+
+INSERT INTO Shipping
+(ShippingID, OrderID, ShippingCompany, TrackingNumber, ShippingDate, DeliveryDate, ShippingStatus)
+VALUES
+('S001','O001','DHL','TRK100001','2026-07-10','2026-07-12','Delivered'),
+('S002','O002','EMS','TRK100002','2026-07-11','2026-07-13','Delivered'),
+('S003','O003','FedEx','TRK100003','2026-07-12',NULL,'In Transit'),
+('S004','O004','UPS','TRK100004',NULL,NULL,'Cancelled');
+
+SELECT * FROM Customers;
+SELECT * FROM Products;
+
+select * from products
+where status="Available";
+
+SELECT *
+FROM Products
+WHERE StockQuantity = 0
+OR Status = 'Out of Stock';
+
+SELECT * FROM Orders;
+
+select  C.CustomerID,
+    C.FirstName,
+    C.LastName,
+    O.OrderID,
+    O.OrderDate,
+    O.TotalAmount,
+    O.OrderStatus
+    from Customers
+join Orders on C.CustomerID = O.CustomerID;
+
+select O.OrderID,
+    P.ProductName,
+    OI.Quantity,
+    OI.UnitPrice,
+    OI.Subtotal
+from OrderItems OI
+JOIN Orders O
+ON OI.OrderID = O.OrderID
+JOIN Products P
+ON OI.ProductID = P.ProductID;
+
+SELECT
+    C.FirstName,
+    C.LastName,
+    P.ProductName,
+    OI.Quantity,
+    O.OrderDate
+FROM Customers C
+JOIN Orders O
+ON C.CustomerID = O.CustomerID
+JOIN OrderItems OI
+ON O.OrderID = OI.OrderID
+JOIN Products P
+ON OI.ProductID = P.ProductID;
+
+
+SELECT
+    O.OrderID,
+    P.Amount,
+    P.PaymentMethod,
+    P.PaymentStatus
+FROM Payments P
+JOIN Orders O
+ON P.OrderID = O.OrderID;
+
+SELECT
+    O.OrderID,
+    S.ShippingCompany,
+    S.TrackingNumber,
+    S.ShippingStatus
+FROM Shipping S
+JOIN Orders O
+ON S.OrderID = O.OrderID;
+
+SELECT
+    P.ProductName,
+    C.CategoryName,
+    P.Price
+FROM Products P
+JOIN Categories C
+ON P.CategoryID = C.CategoryID;
+
+SELECT SUM(Amount) AS TotalRevenue
+FROM Payments
+WHERE PaymentStatus = 'Paid';
+
+SELECT
+    C.FirstName,
+    C.LastName,
+    COUNT(O.OrderID) AS TotalOrders
+FROM Customers C
+LEFT JOIN Orders O
+ON C.CustomerID = O.CustomerID
+GROUP BY C.CustomerID;
+
+SELECT *
+FROM Products
+ORDER BY Price DESC
+LIMIT 1;
+
+SELECT *
+FROM Products
+WHERE StockQuantity < 10;
+
+SELECT *
+FROM Payments
+WHERE PaymentStatus = 'Pending';
+
+SELECT *
+FROM Shipping
+WHERE ShippingStatus = 'Delivered';
+
+SELECT
+    C.FirstName,
+    C.LastName,
+    O.OrderID,
+    P.ProductName,
+    OI.Quantity,
+    OI.Subtotal,
+    PAY.PaymentStatus
+FROM Customers C
+JOIN Orders O
+ON C.CustomerID = O.CustomerID
+JOIN OrderItems OI
+ON O.OrderID = OI.OrderID
+JOIN Products P
+ON OI.ProductID = P.ProductID
+JOIN Payments PAY
+ON O.OrderID = PAY.OrderID;
