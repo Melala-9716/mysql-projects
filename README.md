@@ -153,7 +153,7 @@ A relational database system designed to manage hospital operations including pa
 
 ### ER Diagram
 
-![Hospital Management ER Diagram](./diagrams/Hospital%20management%20diagram.jpg)
+![Hospital Management ER Diagram](./diagrams/Hospital%20Management%20Diagram.jpg)
 
 ---
 
