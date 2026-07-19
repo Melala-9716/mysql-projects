@@ -1,1 +1,68 @@
+create database ECommerce;
 
+create table Customers(
+CustomerID varchar(10) primary key,
+FirstName varchar(100) not null,
+LastName varchar(100),
+Email varchar(100) not null,
+Phone text,
+Address text not null,
+City varchar(100),
+Country varchar(100),
+RegistrationDate date);
+
+create table Products(
+ProductID varchar(10) primary key,
+ProductName varchar(100) not null,
+CategoryID varchar(10),
+Price DECIMAL(10,2) not null,
+StockQuantity int not null,
+Brand  varchar(100),
+Description text,
+Status varchar(15),
+FOREIGN KEY (CategoryID)
+REFERENCES Categories(CategoryID));
+
+create table Categories(
+CategoryName varchar(100) primary key,
+CategoryID varchar(10),
+Description text);
+
+create table orders(
+OrderID varchar(10) primary key,
+CustomerID varchar(10),
+OrderDate date,
+TotalAmount int,
+OrderStatus varchar(15) not null,
+ShippingAddress varchar(100),
+foreign key (CustomerID) references Customers(CustomerID)
+ON DELETE RESTRICT);
+
+create table OrderItems(
+OrderItemID varchar(10) primary key,
+OrderID varchar(10),
+ProductID varchar(10),
+Quantity text,
+UnitPrice int,
+Subtotal int,
+foreign key (OrderID) references orders(OrderID),
+foreign key(ProductID) references Products(ProductID) );
+
+create table Payments(
+PaymentID varchar(10) primary key,
+OrderID varchar(10),
+PaymentDate date,
+Amount int,
+PaymentMethod varchar(100),
+PaymentStatus varchar(15),
+foreign key (OrderID) references orders(OrderID) );
+
+create table Shipping(
+ShippingID varchar(10) primary key,
+OrderID varchar(10),
+ShippingCompany varchar(100),
+TrackingNumber text,
+ShippingDate date,
+DeliveryDate date,
+ShippingStatus varchar(100),
+foreign key (OrderID) references orders(OrderID));
