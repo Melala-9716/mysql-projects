@@ -205,7 +205,7 @@ A relational database system designed to manage online shopping operations inclu
 
 ### ER Diagram
 
-![E-Commerce Management ER Diagram](./diagrams/E-Commerce%20diagram.jpg)
+![E-Commerce Management ER Diagram](./diagrams/E-Commerce-Diagram.jpg)
 
 ---
 
